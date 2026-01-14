@@ -24,6 +24,15 @@
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
                         {{ __('Manajemen Produk') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('reports.sales')" :active="request()->routeIs('reports.sales')">
+                        {{ __('Laporan Penjualan') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('reports.stock')" :active="request()->routeIs('reports.stock')">
+                        {{ __('Laporan Riwayat Stok') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                        {{ __('Manajemen Kategori') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('kasir')

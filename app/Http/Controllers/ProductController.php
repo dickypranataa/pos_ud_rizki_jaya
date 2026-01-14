@@ -5,13 +5,40 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Imports\ProductImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
     //
-    public function index(){
-        $products = Product::with('category')->latest()->paginate(10);
-        return view('products.index', compact('products'));
+    public function index(Request $request)
+    {
+        // Mulai Query (Tambahkan with('category') agar loading lebih cepat/efisien)
+        $query = Product::with('category');
+
+        // 1. Filter Pencarian (Nama atau SKU)
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('sku', 'like', '%' . $search . '%');
+            });
+        }
+
+        // 2. Filter Kategori
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Ambil data produk (paginasi)
+        $products = $query->latest()->paginate(10);
+
+        // 3. AMBIL DATA KATEGORI UNTUK DROPDOWN
+        // Ini adalah bagian yang hilang sebelumnya
+        $categories = Category::all();
+
+        // 4. KIRIM VARIABEL $categories KE VIEW
+        return view('products.index', compact('products', 'categories'));
     }
 
     //TAMBAH BARANG

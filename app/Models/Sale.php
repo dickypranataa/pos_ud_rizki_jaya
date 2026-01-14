@@ -33,4 +33,10 @@ class Sale extends Model // Perhatikan nama class singular (Sale) meski tabel pl
     {
         return $this->belongsTo(User::class);
     }
+
+    // Relasi ke Tipe Harga (Belongs To)
+    public function customerType()
+    {
+        return $this->belongsTo(CustomerType::class);
+    }
 }
